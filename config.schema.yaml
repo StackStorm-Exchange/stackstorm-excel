@@ -8,7 +8,7 @@
     description: "Column in the spreadsheet that contains the key field"
     type: "integer"
     secret: false
-    requried: true
+    required: true
     default: 1
   variable_name_row: 
     description: "Row in the spreadsheet that contains the variables names"
