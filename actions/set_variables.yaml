@@ -1,6 +1,6 @@
 ---
 name: "set_variables"
-runner_type: "run-python"
+runner_type: "python-script"
 description: "adds/updates variables to a spreadsheet"
 enabled: true
 entry_point: "set_variables.py"

@@ -9,6 +9,10 @@ results from workflows in a format that is easily editable and formatable.
 
 Copy and edit the excel.yaml.example into the /opt/stackstorm/configs directory.
 
+**Note** : When modifying the configuration in `/opt/stackstorm/configs/` please
+           remember to tell StackStorm to load these new values by running
+           `st2ctl reload --register-configs`
+
 ## Important Notes about the Excel File
 
 If the excel file does not exist, a new spreadsheet will be created with
