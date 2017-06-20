@@ -1,6 +1,6 @@
 ---
 name: "get_variables"
-runner_type: "run-python"
+runner_type: "python-script"
 description: "returns a json object of the variables for a given key in the excel file"
 enabled: true
 entry_point: "get_variables.py"

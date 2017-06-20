@@ -1,6 +1,6 @@
 ---
 name: "get_keys_for_columns"
-runner_type: "run-python"
+runner_type: "python-script"
 description: "returns an array of the row keys for a given sheet in the excel file"
 enabled: true
 entry_point: "get_keys_for_columns.py"
