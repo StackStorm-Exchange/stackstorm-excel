@@ -4,7 +4,7 @@
     type: "string"
     secret: false
     required: false
-    default: "NONE"
+    default: ""
   key_column:
     description: "Column in the spreadsheet that contains the key field"
     type: "integer"
