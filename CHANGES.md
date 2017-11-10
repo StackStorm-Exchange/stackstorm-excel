@@ -1,9 +1,14 @@
 # Change Log
 
-# 0.2.2
-- updated config.shema.yaml file. set excel_file default key to ""
+## 0.2.2
+
+- Updated `config.schema.yaml` file. `excel_file` now has default ""
   
-# 0.2.0
+## 0.2.1
+
+- Updated Action import path
+  
+## 0.2.0
 
 - Updated action `runner_type` from `run-python` to `python-script`
 
