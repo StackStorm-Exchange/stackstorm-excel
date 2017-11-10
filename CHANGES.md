@@ -1,6 +1,6 @@
 # Change Log
 
-# 0.2.1
+# 0.2.2
 - updated config.shema.yaml file. set excel_file default key to ""
   
 # 0.2.0
