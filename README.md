@@ -59,7 +59,7 @@ array format) will retrieve only those variables that match the array.
 Examples:
 ```
 # Gets all variables for key '123'
-st2 run excel.get_varibles key='123' sheet='Accounts'
+st2 run excel.get_variables key='123' sheet='Accounts'
 
 # Gets only the last_name and first_name variables for key '123'
 st2 run excel.get_variables key='123' sheet='Accounts' \
