@@ -11,7 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from lib import excel_action, excel_reader
+from lib import excel_action, excel_reader, string_converter
 import json
 
 
@@ -26,6 +26,9 @@ class GetExcelVariablesAction(excel_action.ExcelAction):
         excel.set_sheet(sheet, key_column=self._key_column,
                         var_name_row=self._var_name_row,
                         strict=strict)
+
+        key = string_converter.convert_string_to_float_int(key)
+
         excel.set_values_for_variables(key, data)
         excel.save()
 
