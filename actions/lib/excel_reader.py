@@ -12,6 +12,7 @@ limitations under the License.
 """
 
 from openpyxl import Workbook, load_workbook
+import string_converter
 import os
 import time
 
@@ -162,9 +163,14 @@ class ExcelReader(object):
 
     def get_row_for_key(self, key):
         ''' Returns the row for a given key, or -1 if not matched '''
-        if len(key) > 255:
-            self._unlock_file()
-            raise ValueError("Key exceeds 255 characters")
+        try:
+            if len(key) > 255:
+                self._unlock_file()
+                raise ValueError("Key exceeds 255 characters")
+        except TypeError:
+            if isinstance(key, int) or isinstance(key, float):
+                pass
+
         if key in self._keys:
             return self._keys[key]
         return -1
@@ -219,17 +225,29 @@ class ExcelReader(object):
 
         # Fill in values
         for k, value in dictionary.items():
-            # is key or value greater the excel 256 character limit?
-            if len(k) > 255:
+
+            k = string_converter.convert_string_to_float_int(k)
+
+            # is k greater the excel 256 character limit?
+            if isinstance(k, int) or isinstance(k, float):
+                pass
+            elif len(k) > 255:
                 self._unlock_file()
                 raise ValueError("Variable name exceeds 255 characters")
-            if len(k) == 0:
+            elif len(k) == 0:
                 self._unlock_file()
                 raise ValueError("Variable name is blank")
-            if len(value) > 32767:
+
+            value = string_converter.convert_string_to_float_int(value)
+
+            # is value greater the excel 256 character limit?
+            if isinstance(value, int) or isinstance(value, float):
+                pass
+            elif len(value) > 32767:
                 self._unlock_file()
                 raise ValueError("Variable value exceeds 32,767 characters")
-            if not k == key:
+
+            if k != key:
                 if k in variables:
                     self._ws.cell(column=variables[k], row=row).value = value
                 else:
@@ -246,6 +264,7 @@ class ExcelReader(object):
                         self._unlock_file()
                         raise ValueError("Column '%s' missing in sheet '%s'" %
                                          (k, self._sheet_name))
+
 
 if __name__ == "__main__":
     pass

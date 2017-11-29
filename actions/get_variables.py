@@ -11,12 +11,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from lib import excel_action, excel_reader
+from lib import excel_action, excel_reader, string_converter
 import json
 
 
 class GetExcelVariablesAction(excel_action.ExcelAction):
-    def run(self, key, sheet='Sheet', variables='[]', excel_file=None,
+    def run(self, key, sheet='Sheet1', variables='[]', excel_file=None,
             key_column=None, variable_name_row=None):
 
         self.replace_defaults(excel_file, key_column, variable_name_row)
@@ -26,7 +26,10 @@ class GetExcelVariablesAction(excel_action.ExcelAction):
                         var_name_row=self._var_name_row,
                         strict=True)
 
+        key = string_converter.convert_string_to_float_int(key)
+
         vfk = excel.get_variables_for_key(key)
+
         if variables == '[]':  # default
             return vfk
 
