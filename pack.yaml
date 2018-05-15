@@ -1,6 +1,6 @@
 ---
 name : excel
-description : excel actions to read and write variables to an excel file
-version: 0.2.3
+description : Read and Write Excel spreadsheets
+version: 0.2.4
 author : Tim Braly
 email : tbraly@brocade.com

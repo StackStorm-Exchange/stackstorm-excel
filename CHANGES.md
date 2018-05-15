@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.2.4
+
+- No code changes; metadata update only
+
 ## 0.2.3
 
 - Add support for integer or float keys and values
