@@ -1,6 +1,9 @@
 ---
 name : excel
 description : Read and Write Excel spreadsheets
-version: 0.2.4
+version: 0.2.5
 author : Tim Braly
 email : tbraly@brocade.com
+python_versions:
+  - "2"
+  - "3"

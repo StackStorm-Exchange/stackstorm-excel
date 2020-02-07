@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.2.5
+
+- Add explicit support for Python 2 and 3
+
 ## 0.2.4
 
 - No code changes; metadata update only
