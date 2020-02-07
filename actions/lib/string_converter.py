@@ -1,9 +1,11 @@
+import six
+
 from ast import literal_eval
 
 
 def convert_string_to_float_int(string):
 
-    if isinstance(string, str) or isinstance(string, unicode):
+    if isinstance(string, six.string_types):
         try:
             # evaluate the string to float, int or bool
             value = literal_eval(string)
