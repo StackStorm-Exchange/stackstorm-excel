@@ -36,6 +36,7 @@ There are five actions:
 - get_keys_for_rows
 - get_variables
 - set_variables
+- delete_row
 ```
 
 ####get_sheets
@@ -81,5 +82,21 @@ Example:
 # Sets values for key '123'
 st2 run excel.set_variables sheet='Accounts' key='123' \
        variables='{"last_name":"Braly","first_name":"Tim"}' \
+       strict=False
+```
+
+####delete_row
+
+For a key (row name) in a given Excel Sheet, delete the row. If the sheet or
+key do not exist, no error is reported unless "strict" mode is enable.
+
+When calling this action, the excel file will be locked during the process. If 
+another instance has locked the file, then it will retry by default three times 
+waiting a second between attempts. You can adjust these values in the configuration.
+
+Example:
+```
+# Delete row for key '123'
+st2 run excel.delete_row sheet='Accounts' key='123' \
        strict=False
 ```

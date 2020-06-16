@@ -265,6 +265,27 @@ class ExcelReader(object):
                         raise ValueError("Column '%s' missing in sheet '%s'" %
                                          (k, self._sheet_name))
 
+    def delete_row(self, key):
+        ''' Deletes row with a given key '''
+        # Make sure the sheet has been specified
+        if not self._ws:
+            raise NameError("Sheet not specified")
+        # Check to make sure file was locked before allowing modifications
+        if not self._lock:
+            raise IOError("File not locked for modification")
+
+        # Find row for key
+        row = self.get_row_for_key(key)
+        if row == -1:
+            # Only error if strict mode is used
+            if self._strict:
+                self._unlock_file()
+                raise ValueError("No matching row found for key '%s'" % key)
+            else:
+                return
+        # Delete row
+        self._ws.delete_rows(row)
+                 
 
 if __name__ == "__main__":
     pass
