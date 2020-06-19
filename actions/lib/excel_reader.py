@@ -285,6 +285,8 @@ class ExcelReader(object):
                 return
         # Delete row
         self._ws.delete_rows(row)
+        del self._keys[key]
+        self._data_end_row -= 1
                  
 
 if __name__ == "__main__":
