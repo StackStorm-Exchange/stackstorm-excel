@@ -11,7 +11,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from openpyxl import Workbook, load_workbook
+from openpyxl import Workbook
+import openpyxl
 import string_converter
 import os
 import time
@@ -53,7 +54,7 @@ class ExcelReader(object):
             except IOError:
                 raise IOError("Could not lock spreadsheet '%s'" % excel_file)
         try:
-            self._wb = load_workbook(excel_file, data_only=True)
+            self._wb = openpyxl.load_workbook(excel_file, data_only=True)
         except IOError:
             # Create a blank workbook
             self._wb = Workbook()
@@ -170,7 +171,6 @@ class ExcelReader(object):
         except TypeError:
             if isinstance(key, int) or isinstance(key, float):
                 pass
-
         if key in self._keys:
             return self._keys[key]
         return -1

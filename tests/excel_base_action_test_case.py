@@ -24,56 +24,72 @@ from openpyxl import Workbook
 class ExcelBaseActionTestCase(BaseActionTestCase):
     __test__ = False
 
+    class MockCell(Cell):
+        def __init__(self, worksheet, row=None, column=None, value=None, style_array=None):
+            super(ExcelBaseActionTestCase.MockCell, self).__init__(worksheet, row, column, value, style_array)
+
+        def __repr__(self):
+            return "<Cell {}>".format(self._value)
+
     class MockSheet(Worksheet):
-        def __init__(self, rows, **kwargs):
+        def __init__(self, sheetname, rows, **kwargs):
             ''' Mocks worksheet as an array of rows, each row is an array
                 of mock cells taken from value in rows array '''
             super(ExcelBaseActionTestCase.MockSheet, self).__init__(**kwargs)
+            self.title = sheetname
             self.mockrows = []
-            for i in range(len(rows)-1):
+            for i in range(len(rows)):
                 newrow = []
-                for j in range(len(rows[i])-1):
-                    newrow.append(mock.Mock(Cell(self,
-                                  row=(i-1), column=(j-1),
-                                  value=rows[i][j])))
+                for j in range(len(rows[i])):
+                    newrow.append(self._createCell(
+                                  row=i, column=j,
+                                  value=rows[i][j]))
                 self.mockrows.append(newrow)
 
-        def delete_rows(idx, amount=1):
+        def _createCell(self, row, column, value=None):
+            cell = ExcelBaseActionTestCase.MockCell(self, row=row, column=column, value=value)
+            return cell
+
+        def delete_rows(self, idx, amount=1):
             for i in range(idx - 1, idx + amount - 1):
                 self.mockrows.pop(i)
 
-        def cell(row, column):
-            rowfound = self.mockrows[row-1]
-            if not rowfound:
-                self.mockrows[row-1] = []
+        def cell(self, row, column, value=None):
+            # Returns cell, or creates one if doesn't exist
+            rowfound = None
+            cellfound = None
+            if row <= len(self.mockrows):
                 rowfound = self.mockrows[row-1]
-            cellfound = rowfound[column-1]
+            if not rowfound:
+                self.mockrows.append([])
+                rowfound = self.mockrows[row-1]
+            if column <= len(rowfound):
+                cellfound = rowfound[column-1]
             if not cellfound:
-                cellfound = mock.Mock(Cell(
-                                 row=(row-1), column=(column-1), value=None))
-                rowfound[column-1] = cellfound
+                cellfound = self._createCell(
+                                 row=row, column=column, value=value)
+                # Put empty cells before our column
+                if column > (len(rowfound) + 1):
+                    for i in range(column - len(rowfound) - 1):
+                        rowfound.append(mock.Mock(Cell(self,row,i,value=None)))
+                rowfound.append(cellfound)
             return cellfound
 
     class MockWorkbook(object):
         def __init__(self, worksheets, new_sheet, **kwargs):
             """ Takes in dictionary of sheets """
-            #super(ExcelBaseActionTestCase.MockWorkbook, self).__init__(**kwargs)
             # Convert dictionary of sheetname -> array of values to
             # dictionary of sheetname -> MockSheet
             self._mocksheets = {}
             for sheetname in worksheets.keys():
-                self._mocksheets[sheetname] = ExcelBaseActionTestCase.MockSheet(worksheets[sheetname], parent=self)
+                self._mocksheets[sheetname] = ExcelBaseActionTestCase.MockSheet(sheetname, worksheets[sheetname], parent=self)
 
         @property
         def sheetnames(self):
              return self._mocksheets.keys()
 
-        def get_sheet_by_name(sheet_name):
+        def get_sheet_by_name(self, sheet_name):
             return self._mocksheets[sheet_name]
-
-
-        def save():
-            pass
 
         def create_sheet(sheet_name):
             return self.new_sheet
