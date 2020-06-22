@@ -81,6 +81,7 @@ class ExcelBaseActionTestCase(BaseActionTestCase):
             # Convert dictionary of sheetname -> array of values to
             # dictionary of sheetname -> MockSheet
             self._mocksheets = {}
+            self.encoding = "utf-8"
             for sheetname in worksheets.keys():
                 self._mocksheets[sheetname] = ExcelBaseActionTestCase.MockSheet(sheetname, worksheets[sheetname], parent=self)
 
@@ -96,3 +97,17 @@ class ExcelBaseActionTestCase(BaseActionTestCase):
 
     def setUp(self):
         super(ExcelBaseActionTestCase, self).setUp()
+
+    @staticmethod
+    def mock_is_file(filename):
+        if "lock" in filename:
+            return False
+        else:
+            return True
+
+    @staticmethod
+    def _get_column(rows, column):
+        keys = []
+        for i in range(len(rows)):
+            keys.append(rows[i][column].value)
+        return keys
