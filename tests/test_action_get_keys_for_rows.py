@@ -19,12 +19,12 @@ from excel_base_action_test_case import ExcelBaseActionTestCase
 
 from datetime import datetime
 
-from delete_row import DeleteExcelRowAction
+from get_keys_for_rows import GetExcelSheetsAction
 
 
-class DeleteRowsTestCase(ExcelBaseActionTestCase):
+class GetKeysForRowsTestCase(ExcelBaseActionTestCase):
     __test__ = True
-    action_cls = DeleteExcelRowAction
+    action_cls = GetExcelSheetsAction
 
     SHEET_1 = [ [ "Col1", "Col2" ], [ "key1", "ro1_2" ], [ "key2", "ro2_2" ], ["key3", "ro3_2"] ]
     SHEET_2 = [ [ "Col1", "Col2" ] ]
@@ -32,7 +32,7 @@ class DeleteRowsTestCase(ExcelBaseActionTestCase):
                     "sheet2": SHEET_2}
 
     def setUp(self):
-        super(DeleteRowsTestCase, self).setUp()
+        super(GetKeysForRowsTestCase, self).setUp()
         self._full_config = self.load_yaml('full.yaml')
 
     def load_yaml(self, filename):
@@ -43,23 +43,33 @@ class DeleteRowsTestCase(ExcelBaseActionTestCase):
         return self._full_config
 
     def return_workbook(filename, data_only):
-      DeleteRowsTestCase.WB =  ExcelBaseActionTestCase.MockWorkbook(DeleteRowsTestCase._MOCK_SHEETS, None)
-      DeleteRowsTestCase.WB.save = mock.MagicMock()
-      return DeleteRowsTestCase.WB
+      GetKeysForRowsTestCase.WB =  ExcelBaseActionTestCase.MockWorkbook(GetKeysForRowsTestCase._MOCK_SHEETS, None)
+      GetKeysForRowsTestCase.WB.save = mock.MagicMock()
+      return GetKeysForRowsTestCase.WB
 
     @mock.patch('openpyxl.load_workbook', return_workbook)
     @mock.patch('os.path.isfile', ExcelBaseActionTestCase.mock_file_exists)
-    def test_delete_first_row_exists(self):
+    def test_get_keys_sheet_exists(self):
         action = self.get_action_instance(self.full_config)
-        result = action.run('sheet1', 'key1', True, "mock_excel.xlsx")
+        result = action.run('sheet1', "mock_excel.xlsx")
 
         self.assertIsNotNone(result)
-        self.assertTrue(result[0])
-        self.assertEquals("Success", result[1])
-        DeleteRowsTestCase.WB.save.assert_called()
-    #    self.assertEqual(2, len(DeleteRowsTestCase.WB.get_sheet_by_name("sheet1").mockrows))
-        keys = ExcelBaseActionTestCase._get_column(DeleteRowsTestCase.WB.get_sheet_by_name("sheet1").mockrows, 0)
-        self.assertTrue("key1" not in keys)
-        self.assertTrue("key2" in keys)
-        self.assertTrue("Col1" in keys)
-        
+        self.assertTrue("key1" in result)
+        self.assertTrue("key2" in result)
+        self.assertTrue("key3" in result)
+        self.assertEquals(3, len(result))
+        GetKeysForRowsTestCase.WB.save.assert_not_called()
+
+    @mock.patch('openpyxl.load_workbook', return_workbook)
+    @mock.patch('os.path.isfile', ExcelBaseActionTestCase.mock_file_exists)
+    def test_get_keys_sheet_not_exist(self):
+        action = self.get_action_instance(self.full_config)
+        with self.assertRaises(KeyError):
+            action.run('sheet3', "mock_excel.xlsx")
+
+    @mock.patch('openpyxl.load_workbook', return_workbook)
+    @mock.patch('os.path.isfile', mock.Mock(return_value=False))
+    def test_get_keys_spreadsheet_not_exist(self):
+        action = self.get_action_instance(self.full_config)
+        with self.assertRaises(ValueError):
+            action.run('sheet3', "mock_excel.xlsx")

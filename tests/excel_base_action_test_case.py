@@ -99,7 +99,7 @@ class ExcelBaseActionTestCase(BaseActionTestCase):
         super(ExcelBaseActionTestCase, self).setUp()
 
     @staticmethod
-    def mock_is_file(filename):
+    def mock_file_exists(filename):
         if "lock" in filename:
             return False
         else:
