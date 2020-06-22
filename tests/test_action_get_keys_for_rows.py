@@ -26,7 +26,7 @@ class GetKeysForRowsTestCase(ExcelBaseActionTestCase):
     __test__ = True
     action_cls = GetExcelSheetsAction
 
-    SHEET_1 = [ [ "Col1", "Col2" ], [ "key1", "ro1_2" ], [ "key2", "ro2_2" ], ["key3", "ro3_2"] ]
+    SHEET_1 = [ [ "Col1", "Col2", "Col3" ], [ "key1", "ro1_2", "ro1_3" ], [ "key2", "ro2_2", "ro2_3" ], ["key3", "ro3_2", "ro3_3"] ]
     SHEET_2 = [ [ "Col1", "Col2" ] ]
     _MOCK_SHEETS = {"sheet1": SHEET_1,
                     "sheet2": SHEET_2}
@@ -49,7 +49,7 @@ class GetKeysForRowsTestCase(ExcelBaseActionTestCase):
 
     @mock.patch('openpyxl.load_workbook', return_workbook)
     @mock.patch('os.path.isfile', ExcelBaseActionTestCase.mock_file_exists)
-    def test_get_keys_sheet_exists(self):
+    def test_get_keys_default_sheet_exists(self):
         action = self.get_action_instance(self.full_config)
         result = action.run('sheet1', "mock_excel.xlsx")
 
@@ -58,6 +58,31 @@ class GetKeysForRowsTestCase(ExcelBaseActionTestCase):
         self.assertTrue("key2" in result)
         self.assertTrue("key3" in result)
         self.assertEquals(3, len(result))
+        GetKeysForRowsTestCase.WB.save.assert_not_called()
+
+    @mock.patch('openpyxl.load_workbook', return_workbook)
+    @mock.patch('os.path.isfile', ExcelBaseActionTestCase.mock_file_exists)
+    def test_get_keys_col_2_sheet_exists(self):
+        action = self.get_action_instance(self.full_config)
+        result = action.run('sheet1', "mock_excel.xlsx", 2)
+
+        self.assertIsNotNone(result)
+        self.assertTrue("ro1_2" in result)
+        self.assertTrue("ro2_2" in result)
+        self.assertTrue("ro3_2" in result)
+        self.assertEquals(3, len(result))
+        GetKeysForRowsTestCase.WB.save.assert_not_called()
+
+    @mock.patch('openpyxl.load_workbook', return_workbook)
+    @mock.patch('os.path.isfile', ExcelBaseActionTestCase.mock_file_exists)
+    def test_get_keys_row_col_specify_exists(self):
+        action = self.get_action_instance(self.full_config)
+        result = action.run('sheet1', "mock_excel.xlsx",3,2)
+
+        self.assertIsNotNone(result)
+        self.assertTrue("ro2_3" in result)
+        self.assertTrue("ro3_3" in result)
+        self.assertEquals(2, len(result))
         GetKeysForRowsTestCase.WB.save.assert_not_called()
 
     @mock.patch('openpyxl.load_workbook', return_workbook)
