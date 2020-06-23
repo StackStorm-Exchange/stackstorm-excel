@@ -144,7 +144,7 @@ class DeleteRowsTestCase(ExcelBaseActionTestCase):
         action = self.get_action_instance(self.full_config)
         with self.assertRaises(ValueError):
             action.run('sheet1', 'key1', True, "mock_excel.xlsx",
-                                variable_name_row=2)
+                       variable_name_row=2)
         DeleteRowsTestCase.WB.save.assert_not_called()
 
     @mock.patch('openpyxl.load_workbook', return_workbook)

@@ -17,8 +17,6 @@ import yaml
 
 from excel_base_action_test_case import ExcelBaseActionTestCase
 
-from datetime import datetime
-
 from get_keys_for_rows import GetExcelSheetsAction
 
 
