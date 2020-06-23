@@ -17,8 +17,6 @@ import yaml
 
 from excel_base_action_test_case import ExcelBaseActionTestCase
 
-from datetime import datetime
-
 from delete_row import DeleteExcelRowAction
 
 
@@ -145,7 +143,7 @@ class DeleteRowsTestCase(ExcelBaseActionTestCase):
     def test_row_exists_specify_key_before_key_row(self):
         action = self.get_action_instance(self.full_config)
         with self.assertRaises(ValueError):
-            result = action.run('sheet1', 'key1', True, "mock_excel.xlsx",
+            action.run('sheet1', 'key1', True, "mock_excel.xlsx",
                                 variable_name_row=2)
         DeleteRowsTestCase.WB.save.assert_not_called()
 
@@ -154,7 +152,7 @@ class DeleteRowsTestCase(ExcelBaseActionTestCase):
     def test_row_not_exist_and_strict(self):
         action = self.get_action_instance(self.full_config)
         with self.assertRaises(ValueError):
-            result = action.run('sheet1', 'key4', True, "mock_excel.xlsx")
+            action.run('sheet1', 'key4', True, "mock_excel.xlsx")
         DeleteRowsTestCase.WB.save.assert_not_called()
 
     @mock.patch('openpyxl.load_workbook', return_workbook)
@@ -180,7 +178,7 @@ class DeleteRowsTestCase(ExcelBaseActionTestCase):
     def test_sheet_not_exist_and_strict(self):
         action = self.get_action_instance(self.full_config)
         with self.assertRaises(KeyError):
-            result = action.run('sheet3', 'key4', True, "mock_excel.xlsx")
+            action.run('sheet3', 'key4', True, "mock_excel.xlsx")
         DeleteRowsTestCase.WB.save.assert_not_called()
         with self.assertRaises(KeyError):
             DeleteRowsTestCase.WB.get_sheet_by_name("sheet4")
