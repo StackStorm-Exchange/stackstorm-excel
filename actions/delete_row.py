@@ -3,7 +3,6 @@ Excel delete row action runner script
 """
 
 from lib import excel_action, excel_reader, string_converter
-import json
 
 
 class DeleteExcelRowAction(excel_action.ExcelAction):
