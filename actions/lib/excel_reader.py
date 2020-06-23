@@ -11,7 +11,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from openpyxl import Workbook, load_workbook
+from openpyxl import Workbook
+import openpyxl
 import string_converter
 import os
 import time
@@ -53,7 +54,7 @@ class ExcelReader(object):
             except IOError:
                 raise IOError("Could not lock spreadsheet '%s'" % excel_file)
         try:
-            self._wb = load_workbook(excel_file, data_only=True)
+            self._wb = openpyxl.load_workbook(excel_file, data_only=True)
         except IOError:
             # Create a blank workbook
             self._wb = Workbook()
@@ -170,7 +171,6 @@ class ExcelReader(object):
         except TypeError:
             if isinstance(key, int) or isinstance(key, float):
                 pass
-
         if key in self._keys:
             return self._keys[key]
         return -1
@@ -264,6 +264,29 @@ class ExcelReader(object):
                         self._unlock_file()
                         raise ValueError("Column '%s' missing in sheet '%s'" %
                                          (k, self._sheet_name))
+
+    def delete_row(self, key):
+        ''' Deletes row with a given key '''
+        # Make sure the sheet has been specified
+        if not self._ws:
+            raise NameError("Sheet not specified")
+        # Check to make sure file was locked before allowing modifications
+        if not self._lock:
+            raise IOError("File not locked for modification")
+
+        # Find row for key
+        row = self.get_row_for_key(key)
+        if row == -1:
+            # Only error if strict mode is used
+            if self._strict:
+                self._unlock_file()
+                raise ValueError("No matching row found for key '%s'" % key)
+            else:
+                return
+        # Delete row
+        self._ws.delete_rows(row)
+        del self._keys[key]
+        self._data_end_row -= 1
 
 
 if __name__ == "__main__":

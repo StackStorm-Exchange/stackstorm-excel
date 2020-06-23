@@ -1,0 +1,6 @@
+---
+excel_file: "temp.xlsx"
+key_column: 1
+variable_name_row: 1
+lock_file_retries: 1
+lock_file_delay: 30

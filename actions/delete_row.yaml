@@ -1,0 +1,34 @@
+---
+name: "delete_row"
+runner_type: "python-script"
+description: "deletes a row with matching key for a given sheet in the excel file"
+enabled: true
+entry_point: "delete_row.py"
+parameters:
+  excel_file:
+    type: "string"
+    description: "Excel file name"
+    required: false
+  key_column:
+    type: "integer"
+    description: "Starting column for keys"
+    default: 1
+    required: false
+  variable_name_row:
+    type: "integer"
+    description: "Starting row for variable names"
+    default: 1
+    required: false
+  sheet:
+    type: "string"
+    description: "Name of sheet"
+    required: true
+  key:
+    type: "string"
+    description: "Key field for row"
+    required: true
+  strict:
+    type: "boolean"
+    description: "When enabled, Sheet must exist & Row must exist"
+    required: true
+    default: True
