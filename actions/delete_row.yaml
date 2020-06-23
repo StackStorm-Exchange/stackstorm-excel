@@ -1,7 +1,7 @@
 ---
 name: "delete_row"
 runner_type: "python-script"
-description: "deletes row in a spreadsheet"
+description: "deletes a row with matching key for a given sheet in the excel file"
 enabled: true
 entry_point: "delete_row.py"
 parameters:
