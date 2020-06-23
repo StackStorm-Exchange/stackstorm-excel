@@ -4,8 +4,6 @@
 
 - Add support for deleting rows
 
-## 0.2.4
-
 ## 0.2.5
 
 - Add explicit support for Python 2 and 3
