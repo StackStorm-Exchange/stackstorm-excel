@@ -26,8 +26,10 @@ class GetKeysForRowsTestCase(ExcelBaseActionTestCase):
     __test__ = True
     action_cls = GetExcelSheetsAction
 
-    SHEET_1 = [ [ "Col1", "Col2", "Col3" ], [ "key1", "ro1_2", "ro1_3" ], [ "key2", "ro2_2", "ro2_3" ], ["key3", "ro3_2", "ro3_3"] ]
-    SHEET_2 = [ [ "Col1", "Col2" ] ]
+    SHEET_1 = [["Col1", "Col2", "Col3"], ["key1", "ro1_2", "ro1_3"],
+               ["key2", "ro2_2", "ro2_3"],
+               ["key3", "ro3_2", "ro3_3"]]
+    SHEET_2 = [["Col1", "Col2"]]
     _MOCK_SHEETS = {"sheet1": SHEET_1,
                     "sheet2": SHEET_2}
 
@@ -43,9 +45,10 @@ class GetKeysForRowsTestCase(ExcelBaseActionTestCase):
         return self._full_config
 
     def return_workbook(filename, data_only):
-      GetKeysForRowsTestCase.WB =  ExcelBaseActionTestCase.MockWorkbook(GetKeysForRowsTestCase._MOCK_SHEETS, None)
-      GetKeysForRowsTestCase.WB.save = mock.MagicMock()
-      return GetKeysForRowsTestCase.WB
+        GetKeysForRowsTestCase.WB = ExcelBaseActionTestCase.MockWorkbook(
+            GetKeysForRowsTestCase._MOCK_SHEETS, None)
+        GetKeysForRowsTestCase.WB.save = mock.MagicMock()
+        return GetKeysForRowsTestCase.WB
 
     @mock.patch('openpyxl.load_workbook', return_workbook)
     @mock.patch('os.path.isfile', ExcelBaseActionTestCase.mock_file_exists)
@@ -77,7 +80,7 @@ class GetKeysForRowsTestCase(ExcelBaseActionTestCase):
     @mock.patch('os.path.isfile', ExcelBaseActionTestCase.mock_file_exists)
     def test_get_keys_row_col_specify_exists(self):
         action = self.get_action_instance(self.full_config)
-        result = action.run('sheet1', "mock_excel.xlsx",3,2)
+        result = action.run('sheet1', "mock_excel.xlsx", 3, 2)
 
         self.assertIsNotNone(result)
         self.assertTrue("ro2_3" in result)

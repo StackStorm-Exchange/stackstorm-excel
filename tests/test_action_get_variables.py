@@ -26,7 +26,8 @@ class GetVariablesTestCase(ExcelBaseActionTestCase):
     __test__ = True
     action_cls = GetExcelVariablesAction
 
-    SHEET_1 = [ [ "Col1", "Col2", "Col3" ], [ "key1", "ro1_2", "rol1_3" ], [ "key2", "ro2_2", "ro2_3" ], ["key3", "ro3_2", "ro3_3"] ]
+    SHEET_1 = [["Col1", "Col2", "Col3"], ["key1", "ro1_2", "rol1_3"],
+               ["key2", "ro2_2", "ro2_3"], ["key3", "ro3_2", "ro3_3"]]
     _MOCK_SHEETS = {"sheet1": SHEET_1}
 
     def setUp(self):
@@ -41,9 +42,10 @@ class GetVariablesTestCase(ExcelBaseActionTestCase):
         return self._full_config
 
     def return_workbook(filename, data_only):
-      GetVariablesTestCase.WB =  ExcelBaseActionTestCase.MockWorkbook(GetVariablesTestCase._MOCK_SHEETS, None)
-      GetVariablesTestCase.WB.save = mock.MagicMock()
-      return GetVariablesTestCase.WB
+        GetVariablesTestCase.WB = ExcelBaseActionTestCase.MockWorkbook(
+            GetVariablesTestCase._MOCK_SHEETS, None)
+        GetVariablesTestCase.WB.save = mock.MagicMock()
+        return GetVariablesTestCase.WB
 
     @mock.patch('openpyxl.load_workbook', return_workbook)
     @mock.patch('os.path.isfile', ExcelBaseActionTestCase.mock_file_exists)
@@ -52,8 +54,8 @@ class GetVariablesTestCase(ExcelBaseActionTestCase):
         result = action.run('key2', 'sheet1', excel_file="mock_excel.xlsx")
 
         self.assertIsNotNone(result)
-        self.assertEquals("ro2_2", result["Col2"]) 
-        self.assertEquals("ro2_3", result["Col3"]) 
+        self.assertEquals("ro2_2", result["Col2"])
+        self.assertEquals("ro2_3", result["Col3"])
         GetVariablesTestCase.WB.save.assert_not_called()
 
     @mock.patch('openpyxl.load_workbook', return_workbook)
