@@ -28,5 +28,5 @@ class GetExcelSheetsAction(excel_action.ExcelAction):
         except excel_reader.UnlockedSheetError:
             # Sheet doesn't exist and we haven't locked sheet as do not
             # want to modify it on get
-           return []
+            return []
         return excel.get_keys()
