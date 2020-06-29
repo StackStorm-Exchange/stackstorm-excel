@@ -99,3 +99,27 @@ class GetKeysForRowsTestCase(ExcelBaseActionTestCase):
         action = self.get_action_instance(self.full_config)
         with self.assertRaises(ValueError):
             action.run('sheet3', "mock_excel.xlsx")
+
+    @mock.patch('openpyxl.load_workbook', return_workbook)
+    @mock.patch('os.path.isfile', ExcelBaseActionTestCase.mock_file_exists)
+    def test_get_keys_sheet_not_exist_strict(self):
+        action = self.get_action_instance(self.full_config)
+        with self.assertRaises(KeyError):
+            action.run('sheet3', "mock_excel.xlsx", strict=True)
+
+    @mock.patch('openpyxl.load_workbook', return_workbook)
+    @mock.patch('os.path.isfile', ExcelBaseActionTestCase.mock_file_exists)
+    def test_get_keys_sheet_not_exist_not_strict(self):
+        action = self.get_action_instance(self.full_config)
+        result = action.run('sheet3', "mock_excel.xlsx", strict=False)
+
+        self.assertIsNotNone(result)
+        self.assertEquals([], result)
+        GetKeysForRowsTestCase.WB.save.assert_not_called()
+
+    @mock.patch('openpyxl.load_workbook', return_workbook)
+    @mock.patch('os.path.isfile', mock.Mock(return_value=False))
+    def test_get_keys_spreadsheet_not_exist_not_strict(self):
+        action = self.get_action_instance(self.full_config)
+        with self.assertRaises(ValueError):
+            action.run('sheet3', "mock_excel.xlsx", strict=False)
