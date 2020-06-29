@@ -292,5 +292,6 @@ class ExcelReader(object):
 class UnlockedSheetError(IOError):
     pass
 
+
 if __name__ == "__main__":
     pass

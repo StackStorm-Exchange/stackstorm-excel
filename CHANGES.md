@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.3.1
+
+- Add unstrict support to get_keys_for_rows
+
 ## 0.3.0
 
 - Add support for deleting rows
