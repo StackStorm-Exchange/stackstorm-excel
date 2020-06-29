@@ -147,7 +147,7 @@ class ExcelReader(object):
                 if self._lock:
                     self._ws = self._wb.create_sheet(self._sheet_name)
                 else:
-                    raise IOError("File not locked for modification")
+                    raise UnlockedSheetError("File not locked for modification")
             else:
                 self._unlock_file()
                 raise KeyError("Sheet '%s' not found" % self._sheet_name)
@@ -288,6 +288,9 @@ class ExcelReader(object):
         del self._keys[key]
         self._data_end_row -= 1
 
+
+class UnlockedSheetError(IOError):
+    pass
 
 if __name__ == "__main__":
     pass

@@ -23,3 +23,8 @@ parameters:
     type: "string"
     description: "Excel sheet name"
     required: true
+  strict:
+    type: "boolean"
+    description: "When enabled, Sheet must exist & Variable Names must exist"
+    required: false
+    default: True

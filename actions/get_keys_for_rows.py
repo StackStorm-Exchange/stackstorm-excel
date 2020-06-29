@@ -16,13 +16,17 @@ from lib import excel_action, excel_reader
 
 class GetExcelSheetsAction(excel_action.ExcelAction):
     def run(self, sheet, excel_file=None, key_column=None,
-            variable_name_row=None):
+            variable_name_row=None, strict=True):
 
         self.replace_defaults(excel_file, key_column, variable_name_row)
 
         excel = excel_reader.ExcelReader(self._excel_file)
-        excel.set_sheet(sheet, key_column=self._key_column,
+        try:
+            excel.set_sheet(sheet, key_column=self._key_column,
                         var_name_row=self._var_name_row,
-                        strict=True)
-
+                        strict=strict)
+        except excel_reader.UnlockedSheetError:
+            # Sheet doesn't exist and we haven't locked sheet as do not
+            # want to modify it on get
+           return []
         return excel.get_keys()
