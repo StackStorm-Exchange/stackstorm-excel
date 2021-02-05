@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.0.0
+
+* Drop Python 2.7 support
+
 ## 0.3.1
 
 - Add unstrict support to get_keys_for_rows
