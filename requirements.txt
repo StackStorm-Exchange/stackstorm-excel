@@ -1,2 +1,2 @@
-openpyxl
+openpyxl<3.0.8
 six
